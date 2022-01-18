@@ -34,6 +34,38 @@ class Quote {
   }
 }
 
+class Music {
+  isPlaying = false;
+  songs = [
+    {
+      title: 'Aqua Caelestis',
+      src: '../assets/sounds/Aqua Caelestis.mp3',
+      duration: '00:58'
+    },
+    {
+      title: 'Ennio Morricone',
+      src: '../assets/sounds/River Flows In You.mp3',
+      duration: '03:50'
+    },
+    { 
+      title: 'River Flows In You',
+      src: '../assets/sounds/River Flows In You.mp3',
+      duration: '03:50'
+    },
+    {
+      title: 'Summer Wind',
+      src: '../assets/sounds/River Flows In You.mp3',
+      duration: '03:50'
+    }
+  ];
+  getMusic(){
+    if(this.songIndex > this.songs.length-1) {
+      this.songIndex = 0;
+    }
+    return this.songs[this.songIndex++]
+  }
+}
+
 const time = document.querySelector(".time");
 const dateContainer = document.querySelector(".date");
 const greeting = document.querySelector(".greeting");
@@ -48,13 +80,31 @@ const cityInput = document.querySelector('.city');
 const changeQuote = document.querySelector('.change-quote');
 const quoteContainer = document.querySelector('.quote');
 const authorContainer = document.querySelector('.author');
-const playPrev = document.querySelector('.play-prev');
-const playMusic = document.querySelector('.play');
-const playNext = document.querySelector('.play-next');
-const playListName = document.querySelector('.play-list');
-cityInput.value = 'Minsk';
-const quote = new Quote()
 
+const playPrevBtn = document.querySelector('.play-prev');
+const playMusic = document.querySelector('.play');
+const playNextBtn = document.querySelector('.play-next');
+const songs = document.querySelector('.play-list');
+
+cityInput.value = 'Minsk';
+const quote = new Quote();
+const music = new Music();
+
+function playSong() {
+  let audio = document.createElement()
+//  <audio src=`./assets/sounds/${}`></audio>
+}
+
+playMusic.addEventListener('click', () => {
+  if(music.isPlaying) {
+    playMusic.classList.remove('play');
+    playMusic.classList.add('pause');
+  } else {
+    playMusic.classList.remove('pause');
+    playMusic.classList.add('play');
+  }
+  music.isPlaying = !music.isPlaying
+});
 
 function showTime() {
   const date = new Date();
@@ -69,7 +119,7 @@ function showDate() {
   const options = {weekday: 'long', month: 'long', day: 'numeric'};
   const currentDate = date.toLocaleDateString('en-US', options);
   dateContainer.textContent = currentDate;
-  }
+}
 showDate()
 
 function currentTime() {
@@ -145,6 +195,7 @@ function setCity(event) {
     return getWeather();
   }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   getWeather()
   const quoteConfig = quote.getQuote();
@@ -158,48 +209,3 @@ changeQuote.addEventListener('click', () => {
   quoteContainer.textContent = quoteConfig.text
   authorContainer.textContent = quoteConfig.author
 });
-
-
-
-
-const audio = new Audio();
-
-function playAudio() {
-//   const music = 
-//   audio.src = `./assets/sounds/${music}`;
-//   audio.currentTime = 0;
-//   audio.play();
-}
-
-// function pauseAudio() {
-//   audio.pause();
-//   playMusic.classList.toggle('pause');
-// }
-
-playMusic.addEventListener('click', playAudio, () => {
-  console.log('event')
-  playMusic.classList.toggle('pause');
-});
-
-const playList = [
-  {
-    title: 'Aqua Caelestis',
-    src: '../assets/sounds/Aqua Caelestis.mp3',
-    duration: '00:58'
-  },
-  {
-    title: 'Ennio Morricone',
-    src: '../assets/sounds/River Flows In You.mp3',
-    duration: '03:50'
-  },
-  { 
-    title: 'River Flows In You',
-    src: '../assets/sounds/River Flows In You.mp3',
-    duration: '03:50'
-  },
-  {
-    title: 'Summer Wind',
-    src: '../assets/sounds/River Flows In You.mp3',
-    duration: '03:50'
-  }
-];
