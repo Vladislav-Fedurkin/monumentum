@@ -35,34 +35,33 @@ class Quote {
 }
 
 class Music {
-  isPlaying = false;
-  songs = [
+  index = 0;
+  playList = [
     {
-      title: 'Aqua Caelestis',
-      src: '../assets/sounds/Aqua Caelestis.mp3',
-      duration: '00:58'
+    'nameMusic': 'Aqua-Caelestis'
     },
     {
-      title: 'Ennio Morricone',
-      src: '../assets/sounds/River Flows In You.mp3',
-      duration: '03:50'
-    },
-    { 
-      title: 'River Flows In You',
-      src: '../assets/sounds/River Flows In You.mp3',
-      duration: '03:50'
+      'nameMusic': 'Ennio-Morricone',
     },
     {
-      title: 'Summer Wind',
-      src: '../assets/sounds/River Flows In You.mp3',
-      duration: '03:50'
+      'nameMusic': 'River-Flows-In-You',
+    },  
+    {
+      'nameMusic': 'Summer-Wind'
     }
   ];
-  getMusic(){
-    if(this.songIndex > this.songs.length-1) {
-      this.songIndex = 0;
+  btnNxt(){
+    if(this.index > this.playList.length-1) {
+      this.index = 0;
     }
-    return this.songs[this.songIndex++]
+    return (this.playList[this.index++])
+  }
+  btnPrv(){
+    this.index--;
+    if(this.index < 0) {
+      this.index = this.playList.length-1;
+    }
+    return this.playList[this.index];
   }
 }
 
@@ -80,30 +79,49 @@ const cityInput = document.querySelector('.city');
 const changeQuote = document.querySelector('.change-quote');
 const quoteContainer = document.querySelector('.quote');
 const authorContainer = document.querySelector('.author');
-
 const playPrevBtn = document.querySelector('.play-prev');
 const playMusic = document.querySelector('.play');
+const audio = document.querySelector('.audio');
 const playNextBtn = document.querySelector('.play-next');
 const songs = document.querySelector('.play-list');
-
 cityInput.value = 'Minsk';
 const quote = new Quote();
 const music = new Music();
 
 function playSong() {
-  let audio = document.createElement()
-//  <audio src=`./assets/sounds/${}`></audio>
+  audio.src = './assets/sounds/Aqua-Caelestis.mp3'
+  audio.play();
+}
+
+function pauseSong() {
+  audio.pause()
 }
 
 playMusic.addEventListener('click', () => {
   if(music.isPlaying) {
     playMusic.classList.remove('play');
     playMusic.classList.add('pause');
+    playSong()
   } else {
     playMusic.classList.remove('pause');
     playMusic.classList.add('play');
+    pauseSong()
   }
   music.isPlaying = !music.isPlaying
+});
+
+playNextBtn.addEventListener('click', () => {
+  const musicChange = music.btnNxt();
+  const nameMusic = musicChange.nameMusic;
+  audio.src = `./assets/sounds/${nameMusic}.mp3`;
+  audio.play();
+});
+
+playPrevBtn.addEventListener('click', () => {
+  const musicChange = music.btnPrv();
+  const nameMusic = musicChange.nameMusic;
+  audio.src = `./assets/sounds/${nameMusic}.mp3`;
+  audio.play();
 });
 
 function showTime() {
@@ -148,7 +166,7 @@ window.addEventListener('load', getLocalStorage)
 function getRandomNum() {
   let max = 19;
   let min = 1;
-  return num =  Math.ceil(Math.random() * (max - min + 1)) + min;
+  return num =  Math.ceil(Math.random() * (max - min)) + min;
 }
 const randomNum = getRandomNum()
 
@@ -177,8 +195,6 @@ function getSlideNext() {
   body.style.backgroundImage = `url('https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay.slice(5)}/${numBackground}.jpg')`;
 }
 buttonNext.addEventListener('click', () => getSlideNext());
-
-
 
 async function getWeather() {
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityInput.value}&lang=ru&appid=b3b50f00d9a2c5d1c6c0c92622466732&units=metric`;
